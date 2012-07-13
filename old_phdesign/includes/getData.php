@@ -170,7 +170,7 @@ function getAllPics($dir) {
 	$handle = opendir($dir);
 	$i = 0 ;
 	while(false!==($filename=readdir($handle))) {
-		if ($filename!="." && $filename!=".." && $filename!="Thumbs.db") {
+		if ($filename!="Thumbs.db") {
 			$names[$i] = $filename;
 			//$sizes[$i] = (filesize($dir."/".$filename)/1000);
 			//$type[$i] = (filetype($dir."/".$filename));
@@ -185,7 +185,7 @@ function listAllPic($dir,$page,$maxNo) {
 	while(false!==($filename=readdir($handle))) {
 		if ($filename!="." && $filename!="..") {
 			$names[$i] = $filename;
-			$sizes[$i] = (filesize($dir."/".$filename)/1000);
+			$sizes[$i] = (filesize($dir."/".$filename)/1024);
 			//$type[$i] = (filetype($dir."/".$filename));
 			$i++;
 		}

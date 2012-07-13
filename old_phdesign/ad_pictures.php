@@ -15,20 +15,25 @@ include"includes/pageNav.php";
 $page = 1;
 $maxNo = 25;
 
+$fsdir = $_GET['sdir']?$_GET['sdir']:"";
+$sdir = $_POST['sdir']?$_POST['sdir']:"";
+
+$cfolder = $folder.$fsdir."/";
+
 if (isset($_GET['page']) && $_GET['page'] >0 ) {
 	$page = $_GET['page'];
 }
 
 if (isset($_GET['method']) && $_GET['method']=="del" ) {
 	if(isset($_GET['name']) && $_GET['name']!="")
-	deleteImg($folder,$_GET['name']);
+	deleteImg($cfolder,$_GET['name']);
 }
 
 $first = ($page-1)*$maxNo;
 
 if(isset($_POST['POSTACTION'])&&$_POST['POSTACTION']=="UPLOAD")
 {
-	$uploaddir = $folder;
+	$uploaddir = $cfolder."/";
 	$uploadfile = $uploaddir. $_FILES['userfile']['name'];
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir.$_FILES['userfile']['name'])) {
 		$upmsg = "<font style='color:red;'>upload success.</font>";
@@ -37,8 +42,10 @@ if(isset($_POST['POSTACTION'])&&$_POST['POSTACTION']=="UPLOAD")
 	} else {
 		$upmsg = "<font style='color:red;'>upload failed.</font>";
 	}
+	$editGoTo = "?&sdir=".$sdir;
+	header(sprintf("Location: %s", $editGoTo));
 }
-$allPics = getAllPics($folder);
+$allPics = getAllPics($cfolder);
 asort($allPics);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -55,8 +62,29 @@ asort($allPics);
 	<div class="mainbody">
 		<? include"includes/a_nav.php"; ?>
 		<div class="mainbox">
+			<?
+			if ($fsdir != "")
+			{
+				$fsdir_list = explode("/", $fsdir);
+				for ($a=0; $a < count($fsdir_list); $a++)
+				{
+					$fsd = "";
+					for($b=0; $b <= $a; $b++)
+					{
+						$fsd .= $fsdir_list[$b]."/";
+					}
+					if($fsdir_list[$a])
+					{
+						echo "<a href='?sdir=".$fsd."'>".$fsdir_list[$a]."</a> / ";
+					}
+				}
+			}
+			?>
+			<div class="space"></div>
+			
 			<div class="topLine">
 				<form enctype="multipart/form-data" method="post" action="?">
+				<input type="hidden1" name="sdir" value="<? echo $fsdir; ?>"  />
 				<B>Upload:</B>
 				<input name="MAX_FILE_SIZE" value="100000000" type="hidden">
 				<input name="POSTACTION" value="UPLOAD" type="hidden">
@@ -66,16 +94,34 @@ asort($allPics);
 				</form>
 			</div>
 			<div class="space"></div>
+			
 			<? 
 			for($a=0; $a<$maxNo; $a++)
 			{
 				$cu = $a + $first;
 				if($allPics[$cu]!="")
 				{
-					echo "<div class='picBlocks'>";
-					echo "<div class='img'><img src='".$folder.$allPics[$cu]."'><div class='closeIcon' onclick='removeImg(this);'></div></div>";
-					echo "<div class='name'>".$allPics[$cu]."</div>";
-					echo "</div>";
+					if ($allPics[$cu] == "." || $allPics[$cu] == "..")
+					{
+						echo "<div class='picBlocks'>";
+						echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
+						echo "<div class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
+						echo "</div>";
+					}
+					else if(is_dir($cfolder."/".$allPics[$cu]))
+					{
+						echo "<div class='picBlocks'>";
+						echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
+						echo "<div class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
+						echo "</div>";
+					}
+					else if(is_file($cfolder."/".$allPics[$cu]))
+					{
+						echo "<div class='picBlocks'>";
+						echo "<div class='img'><img src='".$cfolder.$allPics[$cu]."'><div class='closeIcon' onclick='removeImg(this);'></div></div>";
+						echo "<div class='name'>".$allPics[$cu]."</div>";
+						echo "</div>";
+					}
 				}
 			}
 			?>

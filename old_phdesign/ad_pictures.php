@@ -63,6 +63,7 @@ asort($allPics);
 		<? include"includes/a_nav.php"; ?>
 		<div class="mainbox">
 			<?
+			echo "<a href='?'>root</a> / ";
 			if ($fsdir != "")
 			{
 				$fsdir_list = explode("/", $fsdir);
@@ -103,17 +104,17 @@ asort($allPics);
 				{
 					if ($allPics[$cu] == "." || $allPics[$cu] == "..")
 					{
-						echo "<div class='picBlocks'>";
-						echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
-						echo "<div class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
-						echo "</div>";
+						//echo "<div class='picBlocks'>";
+						//echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
+						//echo "<div class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
+						//echo "</div>";
 					}
 					else if(is_dir($cfolder."/".$allPics[$cu]))
 					{
-						echo "<div class='picBlocks'>";
+						echo "<a href='?sdir=".$fsdir."/".$allPics[$cu]."' class='picBlocks'>";
 						echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
-						echo "<div class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
-						echo "</div>";
+						echo "<div href='' class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
+						echo "</a>";
 					}
 					else if(is_file($cfolder."/".$allPics[$cu]))
 					{

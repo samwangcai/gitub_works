@@ -233,7 +233,20 @@ function deleteImg($folder,$name)
 		}
 	}
 }
-
+function addFolder($folder, $name)
+{
+	if(!is_dir($folder."/".$name))
+	{
+		if(mkdir($path,0777))
+		{
+			$addmsg = "Delete success.";
+		}
+		else
+		{
+			$addmsg = "Delete Failed.";
+		}
+	}
+}
 
 function getTime($time)
 {

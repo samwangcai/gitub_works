@@ -16,7 +16,7 @@ $page = 1;
 $maxNo = 25;
 
 $fsdir = $_GET['sdir']?$_GET['sdir']:"";
-$sdir = $_POST['sdir']?$_POST['sdir']:"";
+$fsdir = str_replace("//", "/", $fsdir);
 
 $cfolder = $folder.$fsdir."/";
 
@@ -26,18 +26,25 @@ if (isset($_GET['page']) && $_GET['page'] >0 ) {
 
 if (isset($_GET['method']) && $_GET['method']=="del" ) {
 	if(isset($_GET['name']) && $_GET['name']!="")
-	deleteImg($cfolder,$_GET['name']);
+	deleteImg($cfolder, $_GET['name']);
+}
+if (isset($_GET['method']) && $_GET['method']=="adir" ) {
+	if(isset($_GET['name']) && $_GET['name']!="")
+	addFolder($cfolder, $_GET['name']);
 }
 
 $first = ($page-1)*$maxNo;
 
 if(isset($_POST['POSTACTION'])&&$_POST['POSTACTION']=="UPLOAD")
 {
+	$sdir = $_POST['sdir']?$_POST['sdir']:"";
+	$cfolder = $folder.$sdir."/";
 	$uploaddir = $cfolder."/";
+	$uploaddir = str_replace("//", "/", $uploaddir);
 	$uploadfile = $uploaddir. $_FILES['userfile']['name'];
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir.$_FILES['userfile']['name'])) {
 		$upmsg = "<font style='color:red;'>upload success.</font>";
-		$_POST['POSTACTION'] = "";
+		$_GET['POSTACTION'] = "";
 		
 	} else {
 		$upmsg = "<font style='color:red;'>upload failed.</font>";
@@ -84,19 +91,23 @@ asort($allPics);
 			<div class="space"></div>
 			
 			<div class="topLine">
-				<form enctype="multipart/form-data" method="post" action="?">
-				<input type="hidden1" name="sdir" value="<? echo $fsdir; ?>"  />
-				<B>Upload:</B>
-				<input name="MAX_FILE_SIZE" value="100000000" type="hidden">
-				<input name="POSTACTION" value="UPLOAD" type="hidden">
-				<input name="userfile" type="file" style="width:220px; height:22px;">
-				<input value="上传" type="submit">
-				<? echo $upmsg; ?><? echo $delmsg; ?>
+				<form enctype="multipart/form-data" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
+					<input type="hidden" name="sdir" value="<? echo $fsdir; ?>"  />
+					<B>Upload:</B>
+					<input name="MAX_FILE_SIZE" value="100000000" type="hidden">
+					<input name="POSTACTION" value="UPLOAD" type="hidden">
+					<input name="userfile" type="file" style="width:220px; height:22px;">
+					<input value="上传" type="submit">
+					<? echo $upmsg; ?><? echo $delmsg; ?>
 				</form>
 			</div>
 			<div class="space"></div>
 			
 			<? 
+			echo "<a href='?method=adir&sdir=".$fsdir."' class='picBlocks'>";
+			echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
+			echo "<div class='name' style='font-weight:bold;'>+ add Folder</div>";
+			echo "</a>";
 			for($a=0; $a<$maxNo; $a++)
 			{
 				$cu = $a + $first;

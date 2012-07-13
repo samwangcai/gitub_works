@@ -1,0 +1,25 @@
+/* CSS Document */
+body { font-family:Arial, Helvetica, sans-serif; font-size:12px; margin-top:0px; }
+body form { margin:0px; padding:0px; margin-bottom:10px; }
+.topLine { line-height:25px; height:25px; margin-bottom:10px; }
+.picBlocks { width:130px; height:115px; float:left; margin:0px 12px 12px 0; overflow:hidden; border:2px solid #aaa; display:inline-block; }
+.picBlocks .img { margin:5px 5px 0 5px; width:130px; height:90px; }
+.picBlocks .img img { width:120px; height:90px; overflow:hidden; }
+.picBlocks .img .closeIcon { float:right;cursor:pointer; display:block; width:20px; height:20px; background:url(../images/closeIcon.jpg); position:relative; margin-top:-20px; margin-right:10px; }
+.picBlocks .img .closeIcon:hover { background-position:0 -20px; }
+.picBlocks .img .editIcon { position:relative; float:left; margin-top:-20px; line-height:20px; color:red; font-size:14px; font-weight:bold; background:#fff; padding:0 3px; cursor:pointer; }
+.picBlocks .name { width:120px; height:20px; overflow:hidden; padding:0 5px; }
+
+/* page navgation style */
+#pageNav {float:left;margin:0px 0px;width:99.5%;height:20px;line-height:20px;border-left:1px;border-top:1px; background:#000; margin-bottom:15px;}
+#pageNav #page_left {width:530px;height:20px;float:left;}
+#pageNav #page_right {width:170px;height:20px;float:right;}
+#pageNav #page_left .totalPage , #pageNav #page_left .page_index {float:left;}
+#pageNav #page_left .totalPage {width:110px;text-indent:5px;}
+#pageNav #page_left .page_index {width:420px;}
+#pageNav #page_left .page_index .pageTitle {float:left;width:110px;}
+#pageNav #page_left .page_index  .page_index_disable {color:#666;font-weight:bold;margin:0 1px;padding:0 2px;}
+#pageNav #page_left .page_index a {margin:0 1px;padding:0 2px;font-weight:bold;color:#fff; border:none;}
+#pageNav #page_right .page_button_disable , #pageNav #page_right .page_button {text-align:center;width:40px;height:20px;float:left;color:#aaa;}
+#pageNav #page_right .page_button {color:#900;}
+#pageNav img { border:none; }

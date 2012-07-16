@@ -19,6 +19,7 @@ $fsdir = $_GET['sdir']?$_GET['sdir']:"";
 $fsdir = str_replace("//", "/", $fsdir);
 
 $cfolder = $folder.$fsdir."/";
+//$cfolder = str_replace("//", "/", $cfolder);
 
 if (isset($_GET['page']) && $_GET['page'] >0 ) {
 	$page = $_GET['page'];
@@ -35,6 +36,21 @@ if (isset($_GET['method']) && $_GET['method']=="adir" ) {
 
 $first = ($page-1)*$maxNo;
 
+if (isset($_POST['f']) && $_POST['f'] !="" ) {
+	$from = $_POST['f'];
+}
+if (isset($_GET['f']) && $_GET['f'] !="" ) {
+	$from = $_GET['f'];
+}
+
+if (isset($_POST['fn']) && $_POST['fn'] !="" ) {
+	$fname = $_POST['fn'];
+}
+if (isset($_GET['fn']) && $_GET['fn'] !="" ) {
+	$fname = $_GET['fn'];
+}
+
+
 if(isset($_POST['POSTACTION'])&&$_POST['POSTACTION']=="UPLOAD")
 {
 	$sdir = $_POST['sdir']?$_POST['sdir']:"";
@@ -42,14 +58,15 @@ if(isset($_POST['POSTACTION'])&&$_POST['POSTACTION']=="UPLOAD")
 	$uploaddir = $cfolder."/";
 	$uploaddir = str_replace("//", "/", $uploaddir);
 	$uploadfile = $uploaddir. $_FILES['userfile']['name'];
-	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir.$_FILES['userfile']['name'])) {
+	$uploadfilename = strtolower(str_replace(" ","_",$_FILES['userfile']['name']));
+	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir.$uploadfilename)) {
 		$upmsg = "<font style='color:red;'>upload success.</font>";
 		$_GET['POSTACTION'] = "";
 		
 	} else {
 		$upmsg = "<font style='color:red;'>upload failed.</font>";
 	}
-	$editGoTo = "?&sdir=".$sdir;
+	$editGoTo = "?f=".$from."&fn=".$uploadfilename."&sdir=".$sdir;
 	header(sprintf("Location: %s", $editGoTo));
 }
 $allPics = getAllPics($cfolder);
@@ -63,7 +80,12 @@ asort($allPics);
 <?
 if($allPics!="")
 {
-	echo "<a href='?'>root</a> / ";
+	echo "<div>";
+	echo "<span id='uploadFileName' style='display:none1'>".$fname."</span>";
+	echo "<span id='uploadFrom' style='display:none1;'>".$from."</span>";
+	echo "</div>";
+	
+	echo "<a href='?f=".$from."&fn=".$fname."'>root</a> / ";
 	if ($fsdir != "")
 	{
 		$fsdir_list = explode("/", $fsdir);
@@ -76,7 +98,7 @@ if($allPics!="")
 			}
 			if($fsdir_list[$a])
 			{
-				echo "<a href='?sdir=".$fsd."'>".$fsdir_list[$a]."</a> / ";
+				echo "<a href='?f=".$from."&fn=".$fname."&sdir=".$fsd."'>".$fsdir_list[$a]."</a> / ";
 			}
 		}
 	}
@@ -86,12 +108,13 @@ if($allPics!="")
 	<div class="topLine">
 		<form enctype="multipart/form-data" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
 			<input type="hidden" name="sdir" id="sdir" value="<? echo $fsdir; ?>"  />
+			<input type="hidden" name="f" value="<? echo $from; ?>" />
 			<B>Upload:</B>
 			<input name="MAX_FILE_SIZE" value="100000000" type="hidden">
 			<input name="POSTACTION" value="UPLOAD" type="hidden">
 			<input name="userfile" type="file" style="width:220px; height:22px;">
-			<input value="上传" type="submit">
-			<? echo "<span onclick='add_folder();' style='cursor:pointer;'>+ add Folder</span>"; ?>
+			<input value="上传" type="submit" />
+			<? echo "<input type='button' onclick='add_folder();' style='cursor:pointer; margin-left:30px;' value='+ add Folder' />"; ?>
 			<? echo $upmsg; ?><? echo $delmsg; ?>
 		</form>
 	</div>
@@ -112,10 +135,10 @@ if($allPics!="")
 			}
 			else if(is_dir($cfolder."/".$allPics[$cu]))
 			{
-				echo "<a href='?sdir=".$fsdir."/".$allPics[$cu]."' class='picBlocks'>";
-				echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'></div>";
-				echo "<div href='' class='name' style='font-weight:bold;'>".$allPics[$cu]."</div>";
-				echo "</a>";
+				echo "<div class='picBlocks'>";
+				echo "<div class='img'><img src='images/folder.jpg' style='height:auto;'><div class='closeIcon' onclick='removeFolder(this);'></div></div>";
+				echo "<a href='?f=".$from."&fn=".$fname."&sdir=".$fsdir."/".$allPics[$cu]."' class='name' style='font-weight:bold;'>".$allPics[$cu]."</a>";
+				echo "</div>";
 			}
 			else if(is_file($cfolder."/".$allPics[$cu]))
 			{
@@ -183,9 +206,38 @@ function removeImg(obj)
 		}		
 	}
 }
+function removeFolder(obj)
+{
+	var n = confirm("Confirm delete?");
+	if(n)
+	{
+		var url = top.location.href.split("ad_pro")[0];
+		var folder = $(obj).parent().next().attr("href").replace(url, "")
+		folder = folder.split("=")[1].replace("images/upload/", "");
+		if (folder!="")
+		{
+			$.ajax({
+				type: "GET",
+				url: "upload.php",
+				data: "m=del&n="+folder+"&x="+Math.random(),
+				success: function(request){
+					result = request.substr(0, 1);
+					if(result==1||result==3)
+					{
+						$(obj).parent().parent().remove()
+					}
+					else
+					{
+						alert("Folder may not empty, please delete files in it first.");
+					}
+				}
+			})
+		}		
+	}
+}
 function add_folder()
 {
-	var n = prompt("输入文件夹名（只能是数字或字母）：");
+	var n = prompt("Enter folder name (26 letter and numbers only):");
 	if(n)
 	{
 		var url = top.location.href.split("ad_pro")[0];
@@ -212,8 +264,6 @@ function updateToMainPage()
 {
 	var fileName = $('#uploadFileName').html();
 	var fileFrom = $('#uploadFrom').html();
-	//alert(fileName+' '+fileFrom);
-	//parent.document.getElementById(fileFrom).value = fileName;
 	parent.$('#uploadFrameDiv').parent().hide();
 	parent.$('#uploadFrame').src = '';
 	parent.changeBgImg(fileFrom, fileName);

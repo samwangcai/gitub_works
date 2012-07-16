@@ -66,27 +66,27 @@ $data = getData($table, $sql);
 				<div style="width:550px; text-align:right; float:right; margin-top:-40px;">
 					<? pageNav($first, $maxNo, $data[0]); ?>
 				</div>
-			<?
-				if ($data[0] >0 )
-				{
-					for($a=1;$a<=$data[0]; $a++)
+				<?
+					if ($data[0] >0 )
 					{
-						if($data[$a]['id']!="")
+						for($a=1;$a<=$data[0]; $a++)
 						{
-							$t = getTime($data[$a]["add_time"]);
-							echo "<a class='_block products_block' href='products_detail_zh.php?id=".$data[$a]['id']."'>";
-							echo "<div class='img'><img src='".$folder.$data[$a]["thumb"]."'></div>";
-							echo "<div class='s_title'><span class='txt'>".$data[$a]["title_zh"]."</span><span class='time'>".$t['y'].".".$t[m].".".$t[d]."</span></div>";
-							echo "<div class='s_con'>".$data[$a]["synopsis_zh"]."</div>";
-							echo "</a>";
+							if($data[$a]['id']!="")
+							{
+								$t = getTime($data[$a]["add_time"]);
+								echo "<a class='_block products_block' href='products_detail_zh.php?id=".$data[$a]['id']."'>";
+								echo "<div class='img'><img src='".$folder.$data[$a]["thumb"]."'></div>";
+								echo "<div class='s_title'><span class='txt'>".$data[$a]["title_zh"]."</span><span class='time'>".$t['y'].".".$t[m].".".$t[d]."</span></div>";
+								echo "<div class='s_con'>".$data[$a]["synopsis_zh"]."</div>";
+								echo "</a>";
+							}
 						}
 					}
-				}
-				else
-				{
-					echo "<div>no dates </div>";
-				}
-			?>
+					else
+					{
+						echo "<div>no dates </div>";
+					}
+				?>
 			</div>
 		</div>
 		<? include"includes/footer_zh.php"; ?>

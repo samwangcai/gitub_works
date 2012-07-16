@@ -25,10 +25,10 @@ if(isset($_GET['id'])&&$_GET['id']>0)
 {
 	$id = $_GET['id'];
 }
-
+$table = $table_per."products";
 if($id>0)
 {
-	$data = getInfo("ph_products", "id", $id);
+	$data = getInfo($table, "id", $id);
 	if($data['id']>0)
 	{
 		$type = "edit";
@@ -74,87 +74,96 @@ else
 			<input type="hidden" name="type" value="products" />
 			<input type="hidden" name="fromPage" value="<? echo $from; ?>" />
 			<input type="hidden" name="id" value="<? echo $data['id']; ?>" />
-			<input type="hidden" name="img" id="imgs" value="<? echo $data['img']; ?>" />
-			<input type="hidden" name="category" id="category" value="<? echo $data['category']; ?>" />
-			<input type="hidden" name="material" id="material" value="<? echo $data['material']; ?>" />
-			<input type="hidden" name="colour" id="colour" value="<? echo $data['colour']; ?>" />
+			<input type="hidden" name="thumb" id="thumb" value="<? echo $data['thumb']; ?>" />
 			<table class="editTable" cellpadding="0" cellspacing="0" border="0" style="width:800px;">
 				<tr>
-					<th width="90">Title:</td>
-					<td><input type="text" name="title" value="<? echo str_replace('"','&quot;',$data['title']); ?>" /></td>
+					<th width="90">Title (中文):</td>
+					<td><input type="text" name="title_zh" value="<? echo str_replace('"','&quot;',$data['title_zh']); ?>" /></td>
+				</tr>
+				<tr>
+					<th width="90">Title (English):</td>
+					<td><input type="text" name="title_en" value="<? echo str_replace('"','&quot;',$data['title_en']); ?>" /></td>
 				</tr>
 				<tr>
 					<th>Date  :</td>
-					<td><input type="text" name="date" value="<? if($type=="edit") { echo $data['date']; } else { echo date("Y-m-s H:i:s"); } ?>" /></td>
+					<td><input type="text" name="add_time" value="<? if($type=="edit") { echo $data['add_time']; } else { echo date("Y-m-s H:i:s"); } ?>" /></td>
 				</tr>
 				<tr>
 					<th>Category :</td>
 					<td>
-						<label><input type="checkbox" name="categoryCheckbox" value="daily_goods" />daily goods</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="organizer" />organizer</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="home_textile" />home textile</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="kitechen_dinning" />kitechen_dinning</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="living_room" />living room</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="paper_stationary" />paper stationary</label>
-						<label><input type="checkbox" name="categoryCheckbox" value="health_aid" />health aid</label>
+						<select name="category">
+							<?
+							for($a=1; $a<6; $a++)
+							{
+								echo "<option value='".$a."' ";
+								if ($a==$data['category'])
+								{
+									echo  "selected=selected";
+								}
+								echo " >".format_text("products", "zh", $a)." - ".format_text("products", "en", $a)."</option>";
+							}
+							?>
+						</select>
 					</td>
 				</tr>
 				<tr>
-					<th>Material:</td>
+					<th>Size:</td>
 					<td colspan="2">
-						<label><input type="checkbox" name="materialCheckbox" value="fabric" />fabric</label>
-						<label><input type="checkbox" name="materialCheckbox" value="wood" />wood</label>
-						<label><input type="checkbox" name="materialCheckbox" value="silicon" />silicon</label>
-						<label><input type="checkbox" name="materialCheckbox" value="paper" />paper</label>
-						<label><input type="checkbox" name="materialCheckbox" value="metal" />metal</label>
-						<label><input type="checkbox" name="materialCheckbox" value="plastic" />plastic</label>
-						<label><input type="checkbox" name="materialCheckbox" value="leather" />leather</label>
-						<label><input type="checkbox" name="materialCheckbox" value="others" />others</label>
+						长: &nbsp; &nbsp;<input type="text" style="width:100px;" name="length" value="<? echo str_replace('"','&quot;',$data['length']); ?>" />
+						&nbsp; &nbsp; &nbsp; 宽: &nbsp; &nbsp;<input type="text" style="width:100px;" name="width" value="<? echo str_replace('"','&quot;',$data['width']); ?>" />
+						&nbsp; &nbsp; &nbsp; 高: &nbsp; <input type="text" style="width:100px;" name="height" value="<? echo str_replace('"','&quot;',$data['height']); ?>" />
 					</td>
 				</tr>
 				<tr>
-					<th>Colour:</td>
+					<th>Weight:</td>
 					<td colspan="2">
-						<label><input type="checkbox" name="colourCheckbox" value="nature" />nature</label>
-						<label><input type="checkbox" name="colourCheckbox" value="black" />black</label>
-						<label><input type="checkbox" name="colourCheckbox" value="grey" />grey</label>
-						<label><input type="checkbox" name="colourCheckbox" value="white" />white</label>
-						<label><input type="checkbox" name="colourCheckbox" value="brown" />brown</label>
-						<label><input type="checkbox" name="colourCheckbox" value="red" />red</label>
-						<label><input type="checkbox" name="colourCheckbox" value="orange" />orange</label>
-						<label><input type="checkbox" name="colourCheckbox" value="others" />others</label>
+						净重: <input type="text" style="width:100px;" name="net_weight" value="<? echo str_replace('"','&quot;',$data['net_weight']); ?>" />
+						&nbsp; &nbsp; &nbsp; 毛重: <input type="text" style="width:100px;" name="gross_weight" value="<? echo str_replace('"','&quot;',$data['gross_weight']); ?>" />
 					</td>
 				</tr>
 				<tr>
-					<th>Product place:</td>
-					<td><input type="text" name="place" value="<? echo str_replace('"','&quot;',$data['place']); ?>" /></td>
+					<th>Packaging (中文):</td>
+					<td><input type="text" name="packaging_zh" value="<? echo str_replace('"','&quot;',$data['packaging_zh']); ?>" /></td>
 				</tr>
 				<tr>
-					<th>Specification:</td>
-					<td><input type="text" name="specification" value="<? echo str_replace('"','&quot;',$data['specification']); ?>" /></td>
+					<th>Packaging (English):</td>
+					<td><input type="text" name="packaging_en" value="<? echo str_replace('"','&quot;',$data['packaging_en']); ?>" /></td>
 				</tr>
 				<tr>
-					<th>Packaging:</td>
-					<td><input type="text" name="packaging" value="<? echo str_replace('"','&quot;',$data['packaging']); ?>" /></td>
+					<th>Material (中文):</td>
+					<td colspan="2">
+						<input type="text" name="material_zh" value="<? echo str_replace('"','&quot;',$data['material_zh']); ?>" />
+					</td>
 				</tr>
 				<tr>
-					<th>Designer:</td>
-					<td><input type="text" name="designer" value="<? echo str_replace('"','&quot;',$data['designer']); ?>" /></td>
+					<th>Material (English):</td>
+					<td colspan="2">
+						<input type="text" name="material_en" value="<? echo str_replace('"','&quot;',$data['material_en']); ?>" />
+					</td>
 				</tr>
 				<tr>
-					<th>Price:</td>
-					<td><input type="text" name="price" value="<? echo str_replace('"','&quot;',$data['price']); ?>" /></td>
+					<th>Material text (中文):</td>
+					<td><textarea name="material_txt_zh" ><? echo str_replace('"','&quot;',$data['material_txt_zh']); ?></textarea></td>
+				</tr>
+				<tr>
+					<th>Material text (English):</td>
+					<td><textarea name="material_txt_en" ><? echo str_replace('"','&quot;',$data['material_txt_en']); ?></textarea></td>
+				</tr>
+				<tr>
+					<th>Synopsis (中文):</td>
+					<td><textarea name="synopsis_zh" ><? echo str_replace('"','&quot;',$data['synopsis_zh']); ?></textarea></td>
+				</tr>
+				<tr>
+					<th>Synopsis (English):</td>
+					<td><textarea name="synopsis_en" ><? echo str_replace('"','&quot;',$data['synopsis_en']); ?></textarea></td>
 				</tr>
 				<tr>
 					<th>Pictures:</td>
 					<td>
-						<input type="button" id="uploadBtn" class="small" value="upload" style="margin-bottom:15px;" />
+						<input type="hidden" name="pictures" id="imgs" value="<? echo $data['pictures']; ?>" />
+						<input type="button" id="uploadBtn" class="small" value="add pictures" style="margin-bottom:15px;" />
 						<div class="imgs"></div>
 					</td>
-				</tr>
-				<tr>
-					<th>Synopsis:</td>
-					<td colspan="2"><textarea name="context"><? echo $data['context']; ?></textarea></td>
 				</tr>
 			</table>
 			<p></p>
@@ -172,12 +181,14 @@ else
 <script language="javascript">
 $(document).ready(function(){
 	var imgs = $("#imgs").val();
-	var type = "mimg"
+	var type = "mimg";
 	if(imgs!="")
 	{
 		changeBgImg(type, imgs);
 	}
-	setCheckboxs();
+	
+	var cur = $("#thumb").val()?$("#thumb").val():0;
+	set_main($(".imgs .img img:eq("+cur+")"));	
 }); 
 function changeBgImg(type, imgs)
 {
@@ -191,9 +202,8 @@ function changeBgImg(type, imgs)
 		{
 			if(t[a]!="")
 			{
-				//imgList.push(t[a]);
 				vals += t[a] + "||";
-				html += "<div class='img'><img src='images/upload/" + t[a] + "' /><div class='closeIcon' onclick='removeImg(this);'></div></div>\n";
+				html += "<div class='img'><img src='images/upload/" + t[a] + "' onclick='set_main(this);' /><div class='closeIcon' onclick='removeImg(this);'></div></div>\n";
 			}
 		}
 		$("#imgs").val(vals);
@@ -215,6 +225,18 @@ function changeBgImg(type, imgs)
 		pics = pics.replace(imgs+"||");
 		changeBgImg(type, pics);
 	}
+	
+	var cur = $("#thumb").val()?$("#thumb").val():0;
+	set_main($(".imgs .img img:eq("+cur+")"));
+}
+function set_main(obj)
+{
+	if($(obj).attr("src")!=""||$(obj).attr("src")!="undefined")
+	{
+		$(".imgs .img").removeClass("imgon");
+		$(obj).parent().addClass("imgon");
+	}
+	$("#thumb").val($(".imgs .img img").index($(obj)));
 }
 $(".uploadFrameDiv, .InforDiv").draggable({
 	handle: "h2"
@@ -223,46 +245,20 @@ $("#uploadBtn").bind("click",function(){
 	$(".uploadFrameDiv").css("left",$(this).position().left-0)
 	$(".uploadFrameDiv").css("top",$(this).position().top+30)
 	$(".uploadFrameDiv").show();
-	$("#uploadFrame").attr("src","upload.php?f=mimgu");
+	$("#uploadFrame").attr("src","ad_pictures_iframe.php?f=mimgu");
 })
 function removeImg(obj)
 {
-	//var n = confirm("Confirm delete?");
-	//if(n)
-	//{
-		var url = top.location.href.split("ad_")[0];
-		var img = $(obj).prev().attr("src").replace(url, "").replace("images/upload/", "");
-		if (img!="")
-		{
-			var pics = $("#imgs").val();
-			pics = pics.replace(img+"||", "");
-			$("#imgs").val(pics);
-			var type = "mimg";
-			changeBgImg(type, pics);
-			/*
-			$.ajax({
-				type: "GET",
-				url: "upload.php",
-				data: "m=del&n="+img+"&x="+Math.random(),
-				success: function(request){
-					result = request.substr(0, 1);
-					if(result==1||result==3)
-					{
-						var pics = $("#imgs").val();
-						pics = pics.replace(img+"||", "");
-						$("#imgs").val(pics);
-						var type = "mimg";
-						changeBgImg(type, pics);
-					}
-					else
-					{
-						alert("please try again.");
-					}
-				}
-			})
-			*/
-		}		
-	//}
+	var url = top.location.href.split("ad_")[0];
+	var img = $(obj).prev().attr("src").replace(url, "").replace("images/upload/", "");
+	if (img!="")
+	{
+		var pics = $("#imgs").val();
+		pics = pics.replace(img+"||", "");
+		$("#imgs").val(pics);
+		var type = "mimg";
+		changeBgImg(type, pics);
+	}
 }
 $("#removeBtn").bind("click",function(){
 	var n = confirm("Confirm delete?");
@@ -301,9 +297,9 @@ function setCheckboxs()
 	var categorys = $("input[name='category']").val();
 	var material = $("input[name='material']").val();
 	var colour = $("input[name='colour']").val();
-	setCheckbox("category", categorys);
-	setCheckbox("material", material);
-	setCheckbox("colour", colour);
+	//setCheckbox("category", categorys);
+	//setCheckbox("material", material);
+	//setCheckbox("colour", colour);
 }
 function setCheckbox(name, vals)
 {

@@ -10,17 +10,24 @@ include"includes/globalFunc.php";
 include"includes/getData.php";
 include"includes/login_out.php";
 include"includes/pageNav.php";
-//include("fckeditor/fckeditor.php") ;
 
 $page = $_GET['page']?$_GET['page']:1;
 $type = $_GET['type']?$_GET['type']:"";
+
 $maxNo = 8;
 $first = ($page-1)*$maxNo;
 
 $table = $table_per."products";
-$sql = " where `category`='".$type."' order by add_time desc limit ".$first.", ".$maxNo.";";
-$data = getData("ph_products","date","desc",$first,$maxNo);
-/**/
+if ($type!="")
+{
+	$sql = " where `category`='".$type."' order by add_time desc limit ".$first.", ".$maxNo.";";
+}
+else
+{
+	$sql = " where 1 order by add_time desc limit ".$first.", ".$maxNo.";";
+}
+$data = getData($table,$sql);
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -48,21 +55,15 @@ $data = getData("ph_products","date","desc",$first,$maxNo);
 				{
 					if ($data[$a]['id']!="")
 					{
-						$img = explode("||",$data[$a]['img']);
-						$img = str_replace("||","",$img[0]);
+						$img = explode("||",$data[$a]['pictures']);
 						echo "<div class='dataLine'>";
-						echo "<div class='img'><img src='".$folder.$img."'></div>";
-						echo "<a class='title' href='ad_products_edit.php?id=".$data[$a]['id']."&page=".$page."'>".$data[$a]['title']."</a>";
-						echo "<div class='date'><b>Date:</b> ".$data[$a]['date'];
-						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Place:</b> ".$data[$a]['place'];
-						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Specification:</b> ".$data[$a]['specification']."</div>";
-						echo "<div class='date'><b>Packaging:</b> ".$data[$a]['packaging'];
-						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Designer:</b> ".$data[$a]['designer'];
-						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Price:</b> ".$data[$a]['price']."</div>";
-						echo "<div class='date'><b>Category:</b> ".str_replace("_"," ",str_replace("||"," / ",$data[$a]['category']))."</div>";
-						echo "<div class='date'><b>Material:</b> ".str_replace("_"," ",str_replace("||"," / ",$data[$a]['material']))."</div>";
-						echo "<div class='date'><b>Colour:</b> ".str_replace("_"," ",str_replace("||"," / ",$data[$a]['colour']))."</div>";
-						echo "<div class='synopsis'><b>Synopsis:</b> ".str_replace("\n","<br>",$data[$a]['context'])."</div>";
+						echo "<div class='img'><img src='".$folder.$img[$data[$a]['thumb']]."'></div>";
+						echo "<a class='title' href='ad_products_edit.php?id=".$data[$a]['id']."&page=".$page."'>".$data[$a]['title_zh']."</a>";
+						echo "<div class='date'><b>Date:</b> ".$data[$a]['add_time'];
+						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Packaging:</b> ".$data[$a]['packaging_zh'];
+						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Material:</b> ".$data[$a]['material_zh'];
+						echo " &nbsp; &nbsp; &nbsp; &nbsp; <b>Size:</b> ".$data[$a]['length']." * ".$data[$a]['width']." * ".$data[$a]['height']."</div>";
+						echo "<div class='synopsis'><b>Synopsis:</b> ".str_replace("\n","<br>",$data[$a]['synopsis_zh'])."</div>";
 						echo "<div class='space'></div>";
 						echo "</div>";
 					}

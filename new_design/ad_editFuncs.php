@@ -25,21 +25,16 @@ foreach($_POST as $k => $v)
 		}
 	}
 }
-
-$result = 0;
-if($_POST['type']!="")
+$table = $table_per.$_POST['type']; 
+$result = upData($table, $keys, $vals);
+if ($result==1)
 {
-	$table = $table_per.$_POST['type']; 
-	$result = upData($table, $keys, $vals);
-	if ($_POST['type']=="class")
-	{
-		echo $result;
-	}
-	else
-	{
-		$editGoTo = "admin.php";
-		header(sprintf("Location: %s", $editGoTo));
-	}
+	$editGoTo = $_POST['fromPage']."&msg=success.";
 }
+else
+{
+	$editGoTo = $_POST['fromPage']."&msg=fail.";
+}
+header(sprintf("Location: %s", $editGoTo));
 
 ?>

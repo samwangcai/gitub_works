@@ -186,9 +186,8 @@ $(document).ready(function(){
 	{
 		changeBgImg(type, imgs);
 	}
-	
 	var cur = $("#thumb").val()?$("#thumb").val():0;
-	set_main($(".imgs .img img:eq("+cur+")"));	
+	set_main($(".imgs .img img:eq("+cur+")"));
 }); 
 function changeBgImg(type, imgs)
 {
@@ -227,6 +226,8 @@ function changeBgImg(type, imgs)
 	}
 	
 	var cur = $("#thumb").val()?$("#thumb").val():0;
+	if (cur<0) { cur = 0; }
+	if (cur>$(".imgs .img").length-1) { cur = $(".imgs .img").length-1; }
 	set_main($(".imgs .img img:eq("+cur+")"));
 }
 function set_main(obj)
@@ -242,8 +243,8 @@ $(".uploadFrameDiv, .InforDiv").draggable({
 	handle: "h2"
 });
 $("#uploadBtn").bind("click",function(){
-	$(".uploadFrameDiv").css("left",$(this).position().left-0)
-	$(".uploadFrameDiv").css("top",$(this).position().top+30)
+	$(".uploadFrameDiv").css("left",$(this).position().left-0);
+	$(".uploadFrameDiv").css("top",$(this).position().top+30);
 	$(".uploadFrameDiv").show();
 	$("#uploadFrame").attr("src","ad_pictures_iframe.php?f=mimgu");
 })
@@ -260,93 +261,9 @@ function removeImg(obj)
 		changeBgImg(type, pics);
 	}
 }
-$("#removeBtn").bind("click",function(){
-	var n = confirm("Confirm delete?");
-	if(n)
-	{
-		var fname = $("#small").val();
-		if(fname!="")
-		{
-			$.ajax({
-				type: "GET",
-				url: "upload.php",
-				data: "m=del&n="+fname+"&x="+Math.random(),
-				success: function(request){
-					result = request.substr(0, 1);
-					if(result==1||result==3)
-					{
-						$("#small").val("");
-						$(".img img").attr("src", "");
-						$("#uploadBtn").show();
-						$("#removeBtn").hide();
-					}
-					else
-					{
-						alert("please try again.");
-					}
-				}
-			})
-		}
-	}
-})
 $("#uploadFrameDiv h2 a").bind("click",function(){
-	$(".uploadFrameDiv").hide()
+	$(".uploadFrameDiv").hide();
 })
-function setCheckboxs()
-{
-	var categorys = $("input[name='category']").val();
-	var material = $("input[name='material']").val();
-	var colour = $("input[name='colour']").val();
-	//setCheckbox("category", categorys);
-	//setCheckbox("material", material);
-	//setCheckbox("colour", colour);
-}
-function setCheckbox(name, vals)
-{
-	var list = $("input[name='"+name+"Checkbox']");
-	var valList = vals.split("||");
-	for(var a=0; a<(valList.length-1); a++)
-	{
-		for(var b=0; b<list.length; b++)
-		{
-			if(valList[a] == $(list[b]).val())
-			{
-				$(list[b]).attr("checked", "checked");
-			}
-		}
-	}
-}
-$("input[name='categoryCheckbox'], input[name='materialCheckbox'], input[name='colourCheckbox']").bind("click",function(){
-	var name = $(this).attr("name");
-	var list = $("input[name='"+name+"']");
-	var html = "";
-	for(var a=0; a<list.length; a++)
-	{
-		if($(list[a]).attr("checked")==true)
-		{
-			html += $(list[a]).val() + "||"; 
-		}
-	}
-	$("input[name='"+name.replace('Checkbox','')+"']").val(html);
-})
-
-$(".imgs").sortable({
-	stop: function(event, ui) {
-		setContent()
-	}
-});
-
-function setContent()
-{
-	var url = top.location.href.split("ad_")[0];
-	var list = $(".imgs .img");
-	var val = ""
-	for(var a=0; a<list.length; a++)
-	{
-		val += $(list[a]).find("img").attr("src").replace(url, "").replace("images/upload/", "") + "||";
-	}
-	$("#imgs").val(val);
-}
 </script>
 </body>
 </html>

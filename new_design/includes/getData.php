@@ -46,16 +46,12 @@ function upData($table, $keys, $vals)
 	
 	for($a=0; $a<count($keys); $a++)
 	{
-		if ($keys[$a]=="en_name" || $keys[$a]=="zh_name")
-		{
-			//$vals[$a] = strChange($vals[$a]);
-		}
 		if($keys[$a]=="id" && $vals[$a]>0)
 		{
 			$id = $vals[$a] ;
 			$data = getInfo($table, "id", $vals[$a]) ;
 		}
-		if($keys[$a]=="date" && $vals[$a]=="")
+		if($keys[$a]=="add_time" && $vals[$a]=="")
 		{
 			$vals[$a] = date("Y-m-s H:i:s");
 		}
@@ -174,62 +170,7 @@ function getAllPics($dir) {
 	}
 	return $names;
 }
-function listAllPic($dir,$page,$maxNo) {
-	$handle = opendir($dir);
-	$i = 0 ;
-	while(false!==($filename=readdir($handle))) {
-		if ($filename!="." && $filename!="..") {
-			$names[$i] = $filename;
-			$sizes[$i] = (filesize($dir."/".$filename)/1000);
-			//$type[$i] = (filetype($dir."/".$filename));
-			$i++;
-		}
-	}
-	//array_multisort($names,SORT_DESC,$filename);     
-
-	$pagenum = 1;
-	if (isset($page)) {
-	  $pagenum = $page;
-	}
-	$startnum = ($pagenum - 1) * $maxNo ;
-	$endnum = $startnum + $maxNo;
-
-	for($m = $startnum; $m<$endnum; $m++)
-	{
-		if($names[$m]!="")
-		{
-			echo "<tr style='background:#fff'>";
-			echo "<td width='100' style='height:40px;'><a href='".$dir.$names[$m]."' target='_blank' class='folderNum' title='$names[$m]'><img src='".$dir.$names[$m]."'  height='30' border=0></a></td>";
-			echo "<td>".$names[$m]."</td>";
-			echo "<td><input style='width:320px;' value='".$dir.$names[$m]."'></td>";
-			echo "<td><a href='?page=".$page."&method=del&name=".$names[$m]."'>Delete</a></td>";
-			echo "</tr>";
-		}
-	}
-	echo "</table>";
-	echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' class='dataTable'>";
-	echo "<tr><td colspan='3'>";
-	pageNav($startnum, $maxNo, $i);
-	echo "</td></tr>";
-	echo "</table>";
-}
-
-function deleteImg($folder,$name)
-{
-	if(file_exists($folder.$name))
-	{
-		if(unlink($folder.$name))
-		{
-			$delmsg = "Delete success.";
-		}
-		else
-		{
-			$delmsg = "Delete Failed.";
-		}
-	}
-}
-
-function getTime($time)
+function getTime($time, $format="Y-m-d H:i:s")
 {
 	$time2['y'] = substr($time,0,4);
 	$time2['m'] = substr($time,5,2);
@@ -238,14 +179,29 @@ function getTime($time)
 	$time2['h'] = substr($time,11,2);
 	$time2['i'] = substr($time,14,2);
 	$time2['s'] = substr($time,17,2);
-	return $time2;
+	
+	if($format!="")
+	{
+		$res = $format;
+		
+		$res = str_replace("Y", $time2['y'], $format);
+		$res = str_replace("m", $time2['m'], $res);
+		$res = str_replace("d", $time2['d'], $res);
+		$res = str_replace("h", $time2['H'], $res);
+		$res = str_replace("i", $time2['i'], $res);
+		$res = str_replace("s", $time2['s'], $res);
+		return $res;
+	}
+	else
+	{
+		return $time2;
+	}
 }
 
-function format_time($time)
+function format_time($time, $format)
 {
 	return substr($time,0,4).".".substr($time,5,2).".".substr($time,8,2);
 }
-
 function u2utf82gb($c){
 	return $c;
     $str="";

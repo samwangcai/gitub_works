@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* CSS Document */
 *:link, *:visited, *:hover, *:active, *:focus {
 -webkit-transition:
@@ -9,7 +10,7 @@ transition:
 	background-color .25s linear,
 	border-color .25s linear;
 }
-body { font-family:"Î¢ÈíÑÅºÚ", Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height:1.8; margin:0 10px; }
+body { font-family:"å¾®è½¯é›…é»‘", Verdana, Arial, Helvetica, sans-serif; font-size:12px; line-height:1.8; margin:0 10px; }
 
 img { border:none; }
 a { text-decoration:none;  }
@@ -58,7 +59,7 @@ a { text-decoration:none;  }
 .mainbody ul.lists li:last-child { border-bottom:none; margin-bottom:0px; }
 .mainbody ul.lists li a { display:inline; }
 .mainbody .textareaContent { width:100%; height:300px; margin-bottom:15px; }
-.mainbody .titleContent { width:90%; margin:10px 0 15px 0; border:1px solid #ddd; padding:2px; font-family:"Î¢ÈíÑÅºÚ", Arial, Helvetica, sans-serif; font-size:14px; line-height:26px; }
+.mainbody .titleContent { width:90%; margin:10px 0 15px 0; border:1px solid #ddd; padding:2px; font-family:"å¾®è½¯é›…é»‘", Arial, Helvetica, sans-serif; font-size:14px; line-height:26px; }
 .mainbody ul li img { vertical-align:middle; margin-left:3px; cursor:pointer; }
 
 .orderList { padding:10px; padding-bottom:5px; border:1px solid #ddd; margin-bottom:15px; }
@@ -267,7 +268,9 @@ a { text-decoration:none;  }
 
 
 
-.navigation { line-height:24px; border-bottom:1px solid #ccc; color:#666; padding:10px 0; margin-bottom:10px; }
+.normalTable th, .normalTable td { text-align:left; height:30px; vertical-align:top; }
+
+.navigation { height:24px; overflow:hidden; line-height:24px; border-bottom:1px solid #ccc; color:#666; padding:10px 0; margin-bottom:10px; }
 .navigation a { color:#666; }
 
 .normalTable td { text-align:left; vertical-align:top; height:35px; }
@@ -291,7 +294,7 @@ a { text-decoration:none;  }
 .big { font-size:14px; color:#666; }
 .input1, .textarea1 { border:1px solid #ccc; width:180px; padding:2px; }
 .textarea1 { width:100%; height:100px; }
-.confirm { border:none; background:#333; padding:3px 15px; cursor:pointer; color:#fff; font-size:14px; font-family:"Î¢ÈíÑÅºÚ", Verdana, Arial, Helvetica, sans-serif; font-weight:bold; }
+.confirm { border:none; background:#333; padding:3px 15px; cursor:pointer; color:#fff; font-size:14px; font-family:"å¾®è½¯é›…é»‘", Verdana, Arial, Helvetica, sans-serif; font-weight:bold; }
 
 ._block { width:250px; height:195px; overflow:hidden; float:left; margin-right:11px; margin-bottom:15px; }
 ._block .img { width:248px; height:108px; border:1px solid #ccc; }
@@ -311,10 +314,32 @@ a { text-decoration:none;  }
 .prevBtn:hover  { background:url(../images/index_prev_bg.gif) bottom no-repeat; background-color:none; }
 .nextBtn { background:url(../images/index_next_bg.gif) top no-repeat; background-color:none; }
 .nextBtn:hover  { background:url(../images/index_next_bg.gif) bottom no-repeat; background-color:none; }
-.moveNav { height:12px; position:relative; z-index:10000; cursor:pointer; margin-top:370px; margin-right:15px; float:right; }
+.moveNav { height:12px; position:relative; z-index:10000; cursor:pointer; margin-top:370px; margin-bottom:-382px; margin-right:15px; float:right; }
 .moveNav .dot { width:12px; height:12px; margin-right:5px; overflow:hidden; background:url(../images/index_mv_dot.png) center top no-repeat; float:left; background-color:none; }
 .moveNav .on, .moveNav .dot:hover { background-position:0 -22px; }
 
 .moveOut { text-align:center; width:100%; min-width:960px; height:399px; overflow:hidden; cursor:pointer; position:relative; }
 .moveWidthOut { position:relative; width:100%; height:400px; overflow:hidden; }
 .moveOut .blockImg { position:absolute; height:399px; overflow:hidden; background-repeat:no-repeat; background-position:center; }
+
+
+.pro_syno, .pro_mate, .pro_para { margin-bottom:20px; }
+.pro_syno { width:310px; float:left; margin-right:10px; padding-right:10px; border-right:1px solid #ccc; }
+.pro_mate { width:310px; float:left; margin-right:10px; padding-right:10px; border-right:1px solid #ccc; }
+.pro_para { width:294px; float:right; }
+.pro_syno .title, .pro_mate .title, .pro_syno .title, .pro_para .title { height:30px; background:url(../images/pro_title_bg_red.jpg) repeat-x; color:#fff; font-size:14px; font-weight:bold; padding-left:10px; margin-bottom:0px; }
+.pro_para .title  { background-image:url(../images/pro_title_bg_black.jpg); }
+.p_c { padding:5px; }
+.p_c .img { width:280px; height:115px; padding:6px; border:1px solid #ccc; margin-bottom:20px; }
+.p_c .img img { width:280px; height:115px; }
+
+
+
+
+
+
+
+
+
+
+
